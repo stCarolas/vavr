@@ -170,9 +170,7 @@ import static io.vavr.API.*;
  * <strong>Please note:</strong> flatMap signatures are manifold and have to be declared by subclasses of Value.
  *
  * @param <T> The type of the wrapped value.
- * @deprecated Marked for removal
  */
-@Deprecated
 public interface Value<T> extends Iterable<T> {
 
     /**
@@ -236,7 +234,9 @@ public interface Value<T> extends Iterable<T> {
      * @return {@code true} if both iterables have the same length and {@code predicate(x, y)}
      * is {@code true} for all corresponding elements {@code x} of this iterable and {@code y} of {@code that},
      * otherwise {@code false}.
+     * @deprecated marked or removal. Java has already a well-defined notion of object equality.
      */
+    @Deprecated
     default <U> boolean corresponds(Iterable<U> that, BiPredicate<? super T, ? super U> predicate) {
         final java.util.Iterator<T> it1 = iterator();
         final java.util.Iterator<U> it2 = that.iterator();
@@ -274,7 +274,9 @@ public interface Value<T> extends Iterable<T> {
      *
      * @param o An object
      * @return true, if this equals o according to the rules defined above, otherwise false.
+     * @deprecated marked or removal. Java has already a well-defined notion of object equality.
      */
+    @Deprecated
     default boolean eq(Object o) {
         if (o == this) {
             return true;
@@ -327,20 +329,6 @@ public interface Value<T> extends Iterable<T> {
     }
 
     /**
-     * Performs an action on each element.
-     *
-     * @param action A {@code Consumer}
-     * @throws NullPointerException if {@code action} is null
-     */
-    @Override
-    default void forEach(Consumer<? super T> action) {
-        Objects.requireNonNull(action, "action is null");
-        for (T t : this) {
-            action.accept(t);
-        }
-    }
-
-    /**
      * Gets the underlying value or throws if no value is present.
      * <p>
      * <strong>IMPORTANT! This method will throw an undeclared {@link Throwable} if {@code isEmpty() == true} is true.</strong>
@@ -354,7 +342,9 @@ public interface Value<T> extends Iterable<T> {
      * <strong>Additional note:</strong> Dynamic proxies will wrap an undeclared exception in a {@link java.lang.reflect.UndeclaredThrowableException}.
      *
      * @return the underlying value if this is not empty, otherwise {@code get()} throws a {@code Throwable}
+     * @deprecated get() will be removed from collections. It should be used on single-valued types only.
      */
+    @Deprecated
     T get();
     
     /**
@@ -362,18 +352,22 @@ public interface Value<T> extends Iterable<T> {
      *
      * @param other An alternative value.
      * @return A value of type {@code T}
+     * @deprecated will be removed from io.vavr.collection should be used by single-valued types only
      */
+    @Deprecated
     default T getOrElse(T other) {
         return isEmpty() ? other : get();
     }
 
     /**
-     * Returns the underlying value if present, otherwise {@code other}.
+     * Returns the underlying value if present, otherwise {@code supplier.get()}.
      *
      * @param supplier An alternative value supplier.
      * @return A value of type {@code T}
      * @throws NullPointerException if supplier is null
+     * @deprecated will be removed from io.vavr.collection should be used by single-valued types only
      */
+    @Deprecated
     default T getOrElse(Supplier<? extends T> supplier) {
         Objects.requireNonNull(supplier, "supplier is null");
         return isEmpty() ? supplier.get() : get();
@@ -387,7 +381,9 @@ public interface Value<T> extends Iterable<T> {
      * @return A value of type {@code T}.
      * @throws NullPointerException if supplier is null
      * @throws X                    if no value is present
+     * @deprecated will be removed from io.vavr.collection should be used by single-valued types only
      */
+    @Deprecated
     default <X extends Throwable> T getOrElseThrow(Supplier<X> supplier) throws X {
         Objects.requireNonNull(supplier, "supplier is null");
         if (isEmpty()) {
@@ -403,7 +399,9 @@ public interface Value<T> extends Iterable<T> {
      * @param supplier An alternative value supplier.
      * @return A value of type {@code T}.
      * @throws NullPointerException if supplier is null
+     * @deprecated will be removed from io.vavr.collection should be used by single-valued types only. Use getOrElse(() -> Try.of(supplier).get()) instead.
      */
+    @Deprecated
     default T getOrElseTry(CheckedFunction0<? extends T> supplier) {
         Objects.requireNonNull(supplier, "supplier is null");
         return isEmpty() ? Try.of(supplier).get() : get();
@@ -413,7 +411,9 @@ public interface Value<T> extends Iterable<T> {
      * Returns the underlying value if present, otherwise {@code null}.
      *
      * @return A value of type {@code T} or {@code null}.
+     * @deprecated will be removed from io.vavr.collection should be used by single-valued types only. Use getOrElse(null) instead.
      */
+    @Deprecated
     default T getOrNull() {
         return isEmpty() ? null : get();
     }
@@ -425,28 +425,36 @@ public interface Value<T> extends Iterable<T> {
      * until the value is present and the computation can be performed.
      *
      * @return true if this {@code Value} is async (like {@link io.vavr.concurrent.Future}), false otherwise.
+     * @deprecated marked for removal
      */
+    @Deprecated
     boolean isAsync();
 
     /**
      * Checks, this {@code Value} is empty, i.e. if the underlying value is absent.
      *
      * @return false, if no underlying value is present, true otherwise.
+     * @deprecated will be moved to controls and collections
      */
+    @Deprecated
     boolean isEmpty();
 
     /**
      * Checks if this {@code Value} is lazily evaluated.
      *
      * @return true if this {@code Value} is lazy (like {@link Lazy} and {@link Stream}), false otherwise.
+     * @deprecated moved to io.vavr.collections.Traversable
      */
+    @Deprecated
     boolean isLazy();
 
     /**
      * States whether this is a single-valued type.
      *
      * @return {@code true} if this is single-valued, {@code false} otherwise.
+     * @deprecated to be removed
      */
+    @Deprecated
     boolean isSingleValued();
 
     /**
@@ -455,7 +463,9 @@ public interface Value<T> extends Iterable<T> {
      * @param mapper A mapper
      * @param <U>    The new component type
      * @return A new value
+     * @deprecated will be moved to controls and collections
      */
+    @Deprecated
     <U> Value<U> map(Function<? super T, ? extends U> mapper);
 
     /**
@@ -465,14 +475,18 @@ public interface Value<T> extends Iterable<T> {
      *
      * @param action The action that will be performed on the element(s).
      * @return this instance
+     * @deprecated will be moved to collections. Please use forEach for controls.
      */
+    @Deprecated
     Value<T> peek(Consumer<? super T> action);
 
     /**
      * Returns the name of this Value type, which is used by toString().
      *
      * @return This type name.
+     * @deprecated marked for removal. Also deprecated in Scala 2.13.0, replaced by an elaborate algorithm to obtain the class name.
      */
+    @Deprecated
     String stringPrefix();
 
     // -- output
@@ -483,7 +497,9 @@ public interface Value<T> extends Iterable<T> {
      *
      * @param out The PrintStream to write to
      * @throws IllegalStateException if {@code PrintStream.checkError()} is true after writing to stream.
+     * @deprecated marked for removal
      */
+    @Deprecated
     default void out(PrintStream out) {
         for (T t : this) {
             out.println(String.valueOf(t));
@@ -499,7 +515,9 @@ public interface Value<T> extends Iterable<T> {
      *
      * @param writer The PrintWriter to write to
      * @throws IllegalStateException if {@code PrintWriter.checkError()} is true after writing to writer.
+     * @deprecated marked for removal
      */
+    @Deprecated
     default void out(PrintWriter writer) {
         for (T t : this) {
             writer.println(String.valueOf(t));
@@ -514,7 +532,9 @@ public interface Value<T> extends Iterable<T> {
      * If this value consists of multiple elements, each element is displayed in a new line.
      *
      * @throws IllegalStateException if {@code PrintStream.checkError()} is true after writing to stderr.
+     * @deprecated marked for removal
      */
+    @Deprecated
     default void stderr() {
         out(System.err);
     }
@@ -524,7 +544,9 @@ public interface Value<T> extends Iterable<T> {
      * If this value consists of multiple elements, each element is displayed in a new line.
      *
      * @throws IllegalStateException if {@code PrintStream.checkError()} is true after writing to stdout.
+     * @deprecated marked for removal
      */
+    @Deprecated
     default void stdout() {
         out(System.out);
     }
@@ -1179,7 +1201,9 @@ public interface Value<T> extends Iterable<T> {
      * Converts this to an {@link Option}.
      *
      * @return A new {@link Option}.
+     * @deprecated will be moved to single-valued types
      */
+    @Deprecated
     default Option<T> toOption() {
         if (this instanceof Option) {
             return (Option<T>) this;
@@ -1194,7 +1218,9 @@ public interface Value<T> extends Iterable<T> {
      * @param left A left value for the {@link Either}
      * @param <L>  Either left component type
      * @return A new {@link Either}.
+     * @deprecated will be moved to single-valued types
      */
+    @Deprecated
     default <L> Either<L, T> toEither(L left) {
         if (this instanceof Either) {
             return ((Either<?, T>) this).mapLeft(ignored -> left);
@@ -1209,7 +1235,9 @@ public interface Value<T> extends Iterable<T> {
      * @param leftSupplier A {@link Supplier} for the left value for the {@link Either}
      * @param <L>          Validation error component type
      * @return A new {@link Either}.
+     * @deprecated will be moved to single-valued types
      */
+    @Deprecated
     default <L> Either<L, T> toEither(Supplier<? extends L> leftSupplier) {
         Objects.requireNonNull(leftSupplier, "leftSupplier is null");
         if (this instanceof Either) {
@@ -1384,7 +1412,9 @@ public interface Value<T> extends Iterable<T> {
      * otherwise a new {@code Success(value)} is returned.
      *
      * @return A new {@link Try}.
+     * @deprecated will be moved to single-valued types
      */
+    @Deprecated
     default Try<T> toTry() {
         if (this instanceof Try) {
             return (Try<T>) this;
@@ -1401,7 +1431,9 @@ public interface Value<T> extends Iterable<T> {
      *
      * @param ifEmpty an exception supplier
      * @return A new {@link Try}.
+     * @deprecated will be moved to single-valued types
      */
+    @Deprecated
     default Try<T> toTry(Supplier<? extends Throwable> ifEmpty) {
         Objects.requireNonNull(ifEmpty, "ifEmpty is null");
         return isEmpty() ? Try.failure(ifEmpty.get()) : toTry();

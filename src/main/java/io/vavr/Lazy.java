@@ -52,7 +52,7 @@ import java.util.function.Supplier;
  *
  * <pre><code>final CharSequence chars = Lazy.val(() -&gt; "Yay!", CharSequence.class);</code></pre>
  *
- * @deprecated Marked for removal. Java isn't a lazy evaluated language. This implementation is ineffective because it is a wrapper. It does not scale well.
+ * @deprecated Marked for removal (from public API). Java isn't a lazy evaluated language. This implementation is ineffective because it is a wrapper. It does not scale well.
  */
 // DEV-NOTE: No flatMap and orElse because this more like a Functor than a Monad.
 //           It represents a value rather than capturing a specific state.
