@@ -612,7 +612,9 @@ public interface Traversable<T> extends Iterable<T>, Foldable<T>, io.vavr.Value<
      *
      * @return the first value
      * @throws NoSuchElementException if this {@code Traversable} is empty.
+     * @deprecated get() will be removed from collections. Use head() instead.
      */
+    @Deprecated
     @Override
     default T get() {
         return head();
@@ -788,7 +790,7 @@ public interface Traversable<T> extends Iterable<T>, Foldable<T>, io.vavr.Value<
     }
 
     /**
-     * Checks if this Traversable is empty.
+     * Checks if this collection is empty.
      *
      * @return true, if this Traversable contains no elements, false otherwise.
      */
@@ -796,6 +798,13 @@ public interface Traversable<T> extends Iterable<T>, Foldable<T>, io.vavr.Value<
     default boolean isEmpty() {
         return length() == 0;
     }
+
+    /** Checks if this collection is lazily evaluated.
+     *
+     * @return true if this is lazy, false otherwise.
+     */
+     @Override
+    boolean isLazy();
 
     /**
      * Checks if this Traversable is ordered
@@ -819,8 +828,10 @@ public interface Traversable<T> extends Iterable<T>, Foldable<T>, io.vavr.Value<
      * Each of Vavr's collections may contain more than one element.
      *
      * @return {@code false}
+     * @deprecated marked for removal
      */
     @Override
+    @Deprecated
     default boolean isSingleValued() {
         return false;
     }
