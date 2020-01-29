@@ -841,7 +841,32 @@ public abstract class Either<L, R> implements Iterable<R>, io.vavr.Value<R>, Ser
     }
 
     /**
+     * Converts this to an {@link Option}.
+     *
+     * <pre>{@code
+     * // = Some(1)
+     * Either.right(1).toOption();
+     *
+     * // = None
+     * Either.left("error").toOption();
+     * }</pre>
+     *
+     * @return {@code Option.some(get())} if this is right, otherwise {@code Option.none()}.
+     */
+    public final Option<R> toOption() {
+        return isEmpty() ? Option.none() : Option.some(get());
+    }
+
+    /**
      * Returns this as {@code Validation}.
+     *
+     * <pre>{@code
+     * // = Valid(1)
+     * Either.right(1).toValidation();
+     *
+     * // = Invalid("error")
+     * Either.left("error").toValidation();
+     * }</pre>
      *
      * @return {@code Validation.valid(get())} if this is right, otherwise {@code Validation.invalid(getLeft())}.
      */

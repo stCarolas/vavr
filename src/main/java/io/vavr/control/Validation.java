@@ -584,6 +584,20 @@ public abstract class Validation<E, T> implements Iterable<T>, Value<T>, Seriali
     public abstract E getError();
 
     /**
+     * Converts this to an {@link Option}.
+     *
+     * <pre>{@code
+     * // = Some(1)
+     * Validation.valid(1).toOption();
+     * }</pre>
+     *
+     * @return {@code Option.some(get())} if this is valid, otherwise {@code Option.none()}.
+     */
+    public final Option<T> toOption() {
+        return isEmpty() ? Option.none() : Option.some(get());
+    }
+
+    /**
      * Converts this Validation to an {@link Either}.
      *
      * <pre>{@code

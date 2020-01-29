@@ -1176,7 +1176,15 @@ public abstract class Try<T> implements Iterable<T>, io.vavr.Value<T>, Serializa
     /**
      * Converts this {@code Try} to an {@link Either}.
      *
-     * @return A new {@code Either}
+     * <pre>{@code
+     * // = Right(1)
+     * Try.success(1).toEither();
+     *
+     * // = Left(java.lang.Error)
+     * Try.failure(new Error()).toEither();
+     * }</pre>
+     *
+     * @return {@code Either.right(get())} if this is a success, otherwise {@code Either.left(getCause())}.
      */
     public final Either<Throwable, T> toEither() {
         if (isFailure()) {
@@ -1184,6 +1192,23 @@ public abstract class Try<T> implements Iterable<T>, io.vavr.Value<T>, Serializa
         } else {
             return Either.right(get());
         }
+    }
+
+    /**
+     * Converts this {@code Try} to an {@link Option}.
+     *
+     * <pre>{@code
+     * // = Some(1)
+     * Try.success(1).toOption();
+     *
+     * // = None
+     * Try.failure(new Error()).toOption();
+     * }</pre>
+     *
+     * @return {@code Option.some(get())} if this is a success, otherwise {@code Option.none()}.
+     */
+    public final Option<T> toOption() {
+        return isEmpty() ? Option.none() : Option.some(get());
     }
 
     /**
