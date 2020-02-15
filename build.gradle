@@ -133,15 +133,15 @@ uploadArchives {
             def sonatypeUser = findProperty("ossrhUsername")
             def sonatypePass = findProperty("ossrhPassword")
 
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            //beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+            repository(url: "https://api.bintray.com/maven/stcarolas/maven/vavr/;publish=1") {
                 authentication(userName: sonatypeUser, password: sonatypePass)
             }
 
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: sonatypeUser, password: sonatypePass)
-            }
+            //snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                //authentication(userName: sonatypeUser, password: sonatypePass)
+            //}
 
             // Generate Sonatype conform .pom for Bintray Maven-sync, see https://central.sonatype.org/pages/requirements.html
             pom.project {
