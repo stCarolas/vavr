@@ -1247,6 +1247,14 @@ public interface Seq<T> extends Traversable<T>, PartialFunction<Integer, T>, Ser
     @Override
     Seq<T> tail();
 
+    default Seq<T> onEmpty(Runnable action){
+        Objects.requireNonNull(action, "action is null");
+        if (isEmpty()) {
+            action.run();
+        }
+        return this;
+    }
+
     @Override
     Option<? extends Seq<T>> tailOption();
 
