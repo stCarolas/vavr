@@ -16,7 +16,6 @@ apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'maven'
-apply plugin: 'signing'
 
 ext.ammoniteScalaVersion = '2.12' // Currently, generator/Generator.sc does not build with Scala 2.13
 ext.ammoniteVersion = '1.6.9'
@@ -113,10 +112,6 @@ artifacts {
 //      signing.password=password
 //      signing.secretKeyRingFile=/absolute/path/to/.gnupg/secring.gpg
 //
-signing {
-    required { !version.endsWith("-SNAPSHOT") }
-    sign configurations.archives
-}
 
 // Requirements:
 //
