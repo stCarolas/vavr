@@ -46,7 +46,7 @@ import java.util.function.Supplier;
  * @param <T> The type of the optional value.
  */
 @SuppressWarnings("deprecation")
-public abstract class Option<T> implements Iterable<T>, io.vavr.Value<T>, Serializable {
+public abstract class Option<T> implements Iterable<T>, io.vavr.Value<T>, Serializable, Supplier<T> {
 
     private static final long serialVersionUID = 1L;
 
